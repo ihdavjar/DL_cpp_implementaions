@@ -29,7 +29,7 @@ int main() {
     }
         double output[10];  // Assuming the output size is 10
         CNN(flattenedImage, 28,28, output);
-       auto maxElementIterator = std::max_element(output, output + 10);
+        auto maxElementIterator = std::max_element(output, output + 10);
         int maxIndex = std::distance(output, maxElementIterator);
         output_final[k]=maxIndex;
     }

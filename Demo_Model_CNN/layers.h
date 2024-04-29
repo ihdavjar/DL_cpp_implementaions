@@ -3,12 +3,12 @@
 #include "layers.cpp"
 
 // Activation function
-void relu(double *input, double *output, int size);
-void leaky_relu(double *input, double *output, int size);
-void sigmoid(double *input, double *output, int size);
-void tanh(double *input, double *output, int size);
-void softmax(double *input, double *output, int size);
-void hard_swish(double *input, double *output, int size);
+void relu(const double *input, double *output, int size);
+void leaky_relu(const double *input, double *output, int size);
+void sigmoid(const double *input, double *output, int size);
+void tanh(const double *input, double *output, int size);
+void softmax(const double *input, double *output, int size);
+void hard_swish(const double *input, double *output, int size);
 
 // Padding
 void pad_image(const double *input, double *output, int imageWidth, int imageHeight, int imageDepth, int p_h, int p_w);

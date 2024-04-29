@@ -7,7 +7,7 @@
 // ############################## Activation Functions ##############################
 
 // ReLU Activation Function
-void relu(double *input, double *output, int size) {
+void relu(const double *input, double *output, int size) {
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
         output[i] = (input[i] < 0) ? 0 : input[i];
@@ -15,7 +15,7 @@ void relu(double *input, double *output, int size) {
 }
 
 // Leaky ReLU Activation Function
-void leaky_relu(double *input, double *output, int size) {
+void leaky_relu(const double *input, double *output, int size) {
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
         output[i] = (input[i] < 0) ? 0.01 * input[i] : input[i];
@@ -23,7 +23,7 @@ void leaky_relu(double *input, double *output, int size) {
 }
 
 // Sigmoid Activation Function
-void sigmoid(double *input, double *output, int size) {
+void sigmoid(const double *input, double *output, int size) {
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
         output[i] = 1 / (1 + std::exp(-input[i]));
@@ -31,7 +31,7 @@ void sigmoid(double *input, double *output, int size) {
 }
 
 // Tanh Activation Function
-void tanh(double *input, double *output, int size) {
+void tanh(const double *input, double *output, int size) {
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
         output[i] = (std::exp(input[i]) - std::exp(-input[i])) / (std::exp(input[i]) + std::exp(-input[i]));
@@ -39,17 +39,27 @@ void tanh(double *input, double *output, int size) {
 }
 
 // Softmax Activation Function
-void softmax(double *input, double *output, int size) {
-    double sum = 0;
+void softmax(const double *input, double *output, int size) {
+     double max_val = input[0];
+    for (int i = 1; i < size; ++i) {
+    	#pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
+        if (input[i] > max_val) {
+            max_val = input[i];
+        }
+    }
+
+    double sum_exp = 0.0;
+
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
-        output[i] = std::exp(input[i]);
-        sum += output[i];
+        sum_exp += std::exp(input[i] - max_val);
     }
+
     for (int i = 0; i < size; ++i) {
 #pragma HLS LOOP_TRIPCOUNT min = 1 max = 1
-        output[i] /= sum;
-    }
+        output[i] = std::exp(input[i] - max_val) / sum_exp;
+        }
+
 }
 
 // Hard Swish Activation Function
